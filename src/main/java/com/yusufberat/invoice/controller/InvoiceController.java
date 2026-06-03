@@ -4,7 +4,9 @@ import com.yusufberat.invoice.dto.InvoiceRequest;
 import com.yusufberat.invoice.dto.InvoiceResponse;
 import com.yusufberat.invoice.service.InvoiceService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,6 +20,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/invoices")
+@Validated
 public class InvoiceController {
 
     private final InvoiceService invoiceService;
@@ -38,22 +41,22 @@ public class InvoiceController {
     }
 
     @GetMapping("/{id}")
-    public InvoiceResponse get(@PathVariable Long id) {
+    public InvoiceResponse get(@PathVariable @Positive Long id) {
         return invoiceService.getById(id);
     }
 
     @PostMapping("/{id}/send")
-    public InvoiceResponse send(@PathVariable Long id) {
+    public InvoiceResponse send(@PathVariable @Positive Long id) {
         return invoiceService.send(id);
     }
 
     @PostMapping("/{id}/pay")
-    public InvoiceResponse pay(@PathVariable Long id) {
+    public InvoiceResponse pay(@PathVariable @Positive Long id) {
         return invoiceService.markPaid(id);
     }
 
     @PostMapping("/{id}/cancel")
-    public InvoiceResponse cancel(@PathVariable Long id) {
+    public InvoiceResponse cancel(@PathVariable @Positive Long id) {
         return invoiceService.cancel(id);
     }
 

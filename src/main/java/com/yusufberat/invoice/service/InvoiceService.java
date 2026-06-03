@@ -23,6 +23,7 @@ public class InvoiceService {
     }
 
     public InvoiceResponse createDraft(InvoiceRequest request) {
+        validateDates(request);
         invoiceRepository.findByInvoiceNumber(request.invoiceNumber()).ifPresent(existing -> {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Fatura numarası zaten kayıtlı");
         });
@@ -83,5 +84,11 @@ public class InvoiceService {
     private Invoice findOrThrow(Long id) {
         return invoiceRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Fatura bulunamadı: " + id));
+    }
+
+    private void validateDates(InvoiceRequest request) {
+        if (request.dueDate().isBefore(request.issueDate())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Vade tarihi düzenleme tarihinden önce olamaz");
+        }
     }
 }

@@ -69,6 +69,18 @@ Cron ifadesi `application.yml` içinde yapılandırılır (`invoice.automation.o
 mvn test
 ```
 
+## Güvenlik
+
+- Tüm `/api/**` uçları `X-API-Key` ile korunur (otomasyon uçları dahil).
+- Fatura numarası formatı ve tutar doğrulaması; vade ≥ düzenleme tarihi kuralı.
+- H2 Console kapalı; Swagger yalnızca `dev` profilinde.
+- Beklenmeyen hatalarda genel mesaj döner (bilgi sızıntısı önlenir).
+
+```http
+POST /api/v1/invoices/1/send
+X-API-Key: dev-only-change-me
+```
+
 ## Genişletme fikirleri
 
 - E-posta bildirimi (Spring Mail)
